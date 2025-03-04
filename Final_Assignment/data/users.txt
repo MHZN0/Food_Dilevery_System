@@ -1,3 +1,5 @@
 A001,admin,admin,Admin
 C001,Saphal,123,Customer
 C002,Sandi,112,Customer
+V001,Sanji,123,Vendor
+R001,roman,123,Runner

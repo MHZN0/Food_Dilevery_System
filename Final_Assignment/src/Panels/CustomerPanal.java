@@ -21,14 +21,15 @@ public class CustomerPanal extends JFrame {
     private final NotificationManager notificationManager;
     private JLabel balanceLabel;
     private final ReviewManager reviewManager;
+
     public CustomerPanal(String customerId) {
         this.customerId = customerId;
         this.transactionManager = new TransactionManager();
         this.orderManager = new OrderManager();
         this.itemManager = new ItemManager();
         this.notificationManager = new NotificationManager();
-        reviewManager = new ReviewManager(itemManager);        setupUI();
-        updateBalance();
+        reviewManager = new ReviewManager(itemManager);
+        setupUI();
     }
 
     private void setupUI() {
@@ -38,56 +39,51 @@ public class CustomerPanal extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Main split pane for sidebar and content
-        JSplitPane splitPane = new JSplitPane();
-        splitPane.setDividerLocation(200);
-        splitPane.setDividerSize(1);
+        // Main panel with BorderLayout
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Sidebar
-        JPanel sidebarPanel = createSidebar();
-        splitPane.setLeftComponent(sidebarPanel);
+        // Top bar with centered buttons
+        JPanel topBar = createTopBar();
+        mainPanel.add(topBar, BorderLayout.NORTH);
 
-        // Content panel
+        // Content panel (replaces split pane)
         contentPanel = new JPanel(new CardLayout());
-        contentPanel.setBackground(Color.WHITE);
-        splitPane.setRightComponent(contentPanel);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        // Add panels
+        // Add different content panels
         contentPanel.add(createMenuPanel(), "MENU");
         contentPanel.add(createOrderStatusPanel(), "ORDER_STATUS");
         contentPanel.add(createNotificationPanel(), "NOTIFICATIONS");
         contentPanel.add(createHistoryPanel(), "HISTORY");
 
-        add(splitPane);
+        add(mainPanel);
     }
 
-    private JPanel createSidebar() {
-        JPanel sidebar = new JPanel();
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    private JPanel createTopBar() {
+        JPanel topBar = new JPanel(new GridBagLayout()); // GridBagLayout for centering
+        topBar.setBackground(new Color(70, 130, 180));
 
-        // Balance display
-        balanceLabel = new JLabel("Balance: Rs. 0.00");
-        balanceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        sidebar.add(balanceLabel);
-        sidebar.add(Box.createRigidArea(new Dimension(0, 20)));
+        String[] menuItems = {"Menu", "Order Status", "Notifications", "History", "Logout"};
 
-        String[] menuItems = {
-                "Menu",
-                "Order Status",
-                "Notifications",
-                "History",
-                "Logout"
-        };
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Center buttons
+        buttonPanel.setOpaque(false);
 
         for (String item : menuItems) {
             JButton menuButton = createMenuButton(item);
-            sidebar.add(menuButton);
-            sidebar.add(Box.createRigidArea(new Dimension(0, 10)));
+            buttonPanel.add(menuButton);
         }
 
-        return sidebar;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0); // Padding
+
+        topBar.add(buttonPanel, gbc);
+
+        return topBar;
     }
+
 
     private JButton createMenuButton(String text) {
         JButton button = new JButton(text);
@@ -130,7 +126,6 @@ public class CustomerPanal extends JFrame {
 
     private JPanel createMenuPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
 
         // Create table for menu items
         String[] columnNames = {"Item ID", "Item Name", "Vendor", "Price", "Action"};
@@ -144,7 +139,6 @@ public class CustomerPanal extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(menuTable);
         panel.add(scrollPane, BorderLayout.CENTER);
-
         return panel;
     }
 
@@ -259,7 +253,8 @@ public class CustomerPanal extends JFrame {
 
                     updateBalance();
                     dialog.dispose();
-                    refreshOrderStatus();
+                } else {
+                    dialog.dispose();
                 }
             });
 
@@ -281,9 +276,9 @@ public class CustomerPanal extends JFrame {
             e.printStackTrace(); // Log the error for debugging
         }
     }
+
     private JPanel createOrderStatusPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
 
         String[] columnNames = {"Order ID", "Item", "Status", "Action"};
         JTable orderTable = new JTable();
@@ -346,7 +341,6 @@ public class CustomerPanal extends JFrame {
 
     private JPanel createNotificationPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
 
         String[] columnNames = {"Message", "Action"};
         JTable notificationTable = new JTable();
@@ -390,7 +384,6 @@ public class CustomerPanal extends JFrame {
 
     private JPanel createHistoryPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
 
         String[] columnNames = {"Order ID", "Item Name", "Vendor", "Status", "Price", "Actions"};
         JTable historyTable = new JTable();
@@ -526,7 +519,6 @@ public class CustomerPanal extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CustomerPanal("C001").setVisible(true));
         SwingUtilities.invokeLater(() -> new CustomerPanal("C001").setVisible(true));
     }
 }

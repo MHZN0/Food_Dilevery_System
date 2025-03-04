@@ -35,19 +35,18 @@ public class AdminPanel extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Main split pane for sidebar and content
-        JSplitPane splitPane = new JSplitPane();
-        splitPane.setDividerLocation(200);
-        splitPane.setDividerSize(1);
+        // Main Panel with BorderLayout
+        mainPanel = new JPanel(new BorderLayout());
+        setContentPane(mainPanel);
 
-        // Sidebar
-        JPanel sidebarPanel = createSidebar();
-        splitPane.setLeftComponent(sidebarPanel);
+        // Create the top navigation bar
+        JPanel topBar = createTopBar();
+        mainPanel.add(topBar, BorderLayout.NORTH);
 
         // Content panel
         contentPanel = new JPanel(new CardLayout());
         contentPanel.setBackground(Color.WHITE);
-        splitPane.setRightComponent(contentPanel);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         // Welcome panel
         JPanel welcomePanel = new JPanel(new BorderLayout());
@@ -63,8 +62,6 @@ public class AdminPanel extends JFrame {
         contentPanel.add(createRegisterUserPanel(), "REGISTER_USER");
         contentPanel.add(createTopUpPanel(), "TOP_UP");
         contentPanel.add(createTransactionPanel(), "TRANSACTION");
-
-        add(splitPane);
     }
 
     private JPanel createSidebar() {
@@ -82,6 +79,33 @@ public class AdminPanel extends JFrame {
 
         return sidebar;
     }
+
+    private JPanel createTopBar() {
+        JPanel topBar = new JPanel();
+        topBar.setLayout(new GridBagLayout()); // Use GridBagLayout for centering
+        topBar.setBackground(new Color(70, 130, 180));
+
+        String[] menuItems = {"Register User", "List Users", "Customer Top-up", "Transaction Receipt", "Logout"};
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Inner panel to align buttons centrally
+        buttonPanel.setOpaque(false); // Make background transparent
+
+        for (String item : menuItems) {
+            JButton menuButton = createMenuButton(item);
+            buttonPanel.add(menuButton);
+        }
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0); // Add padding
+
+        topBar.add(buttonPanel, gbc);
+
+        return topBar;
+    }
+
 
     private JButton createMenuButton(String text) {
         JButton button = new JButton(text);

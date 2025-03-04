@@ -40,8 +40,8 @@ public class UserManager {
         return switch (role) {
             case "Admin" -> new Admin(userId, username, password);
             case "Customer" -> new Customer(userId, username, password);
-//            case "Vendor" -> new Vendor(userId, username, password);
-//            case "Runner" -> new Runner(userId, username, password);
+            case "Vendor" -> new Vendor(userId, username, password);
+            case "Runner" -> new Runner(userId, username, password);
             default -> null;
         };
     }
@@ -59,8 +59,8 @@ public class UserManager {
         String prefix = switch (role) {
             case "Admin" -> "A";
             case "Customer" -> "C";
-//            case "Vendor" -> "V";
-//            case "Runner" -> "R";
+            case "Vendor" -> "V";
+            case "Runner" -> "R";
             default -> throw new IllegalArgumentException("Invalid role");
         };
 
@@ -205,8 +205,8 @@ public class UserManager {
         stats.put("total_users", getUserCount());
         stats.put("admin_count", getUserCountByRole("Admin"));
         stats.put("customer_count", getUserCountByRole("Customer"));
-//        stats.put("vendor_count", getUserCountByRole("Vendor"));
-//        stats.put("runner_count", getUserCountByRole("Runner"));
+        stats.put("vendor_count", getUserCountByRole("Vendor"));
+        stats.put("runner_count", getUserCountByRole("Runner"));
         return stats;
     }
 }

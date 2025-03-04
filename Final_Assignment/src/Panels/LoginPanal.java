@@ -101,12 +101,12 @@ public class LoginPanal extends JFrame {
                 case "customer":
                     new CustomerPanal(userId).setVisible(true);
                     break;
-//                case "vendor":
-//                    new VendorFrame(userId).setVisible(true);
-//                    break;
-//                case "runner":
-//                    new RunnerFrame(userId).setVisible(true);
-//                    break;
+                case "vendor":
+                    new VendorPanel(userId).setVisible(true);
+                    break;
+                case "runner":
+                    new RunnerPanel(userId).setVisible(true);
+                    break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid role", "Error", JOptionPane.ERROR_MESSAGE);
                     break;
